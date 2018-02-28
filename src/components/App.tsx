@@ -1,6 +1,7 @@
 import * as React from "react";
+import * as Immutable from "immutable";
 import "./../assets/scss/App.scss";
-import { Board } from "../lib/sudopeku";
+import { Board, Cell } from "../lib/sudopeku";
 import BoardGrid from "./BoardGrid"
 
 export interface AppProps {
@@ -16,10 +17,18 @@ export default class App extends React.Component<AppProps, AppState> {
         this.state = { board: new Board() };
     }
 
+    makeClickHandler = (row_idx: number, col_idx: number): () => void => {
+        return () => {
+            let board = this.state.board;
+
+            this.setState({ board: board.toggleNumberByCell(row_idx, col_idx, 1)});
+        }
+    }
+
     render() {
         return (
             <div className="app">
-                <BoardGrid board={this.state.board} />
+                <BoardGrid board={this.state.board} makeClickHandler={this.makeClickHandler} />
             </div>
         );
     }
