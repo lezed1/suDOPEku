@@ -1,13 +1,18 @@
 import * as React from "react";
-import {render} from "react-dom";
-import {AppContainer} from "react-hot-loader";
+import { render } from "react-dom";
+import { AppContainer } from "react-hot-loader";
 import App from "./components/App";
+import configureStore from "./store/configureStore";
+import { Provider } from "react-redux";
 
 const rootEl = document.getElementById("root");
+const store = configureStore();
 
 render(
     <AppContainer>
-        <App/>
+        <Provider store={store}>
+            <App />
+        </Provider>
     </AppContainer>,
     rootEl
 );
@@ -21,7 +26,9 @@ if (module.hot) {
 
         render(
             <AppContainer>
-                <NewApp/>
+                <Provider store={store}>
+                    <NewApp />
+                </Provider>
             </AppContainer>,
             rootEl
         );

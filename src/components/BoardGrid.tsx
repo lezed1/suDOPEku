@@ -1,14 +1,21 @@
 import * as React from "react";
 import "./../assets/scss/BoardGrid.scss";
 import { Board, Cell, Location } from "../lib/sudopeku";
+import { connect } from "react-redux";
+import { BoardState } from "../reducers/boardReducer";
+import { bindActionCreators, Dispatch } from "redux";
+import { actions, ToggleNumberPayload } from "../actions/actions"
+import { RootState } from "../reducers/rootReducer";
 
 
 export interface BoardProps {
     board: Board;
-    makeClickHandler(row_idx: number, col_idx: number): () => void;
+    selectedNumber: number;
+    
+    toggleNumber(ToggleNumberPayload): () => void;
 }
 
-export default class BoardGrid extends React.Component<BoardProps, undefined> {
+class BoardGrid extends React.Component<BoardProps, undefined> {
     createGrid() {
         const size = this.props.board.size;
         const rows = [];
@@ -17,7 +24,7 @@ export default class BoardGrid extends React.Component<BoardProps, undefined> {
             for (let col = 1; col <= size; col++) {
                 const cellComponent = this.props.board.board.get(new Location(row, col)).getComponent();
                 cols.push(
-                    <div className="cell" onClick={this.props.makeClickHandler(row, col)} key={col}>
+                    <div className="cell" onClick={() => this.props.toggleNumber({row, col, number: this.props.selectedNumber})} key={col}>
                         <div className="cellContents" >
                             {cellComponent}
                         </div>
@@ -39,3 +46,26 @@ export default class BoardGrid extends React.Component<BoardProps, undefined> {
         );
     }
 }
+
+const mapStateToProps = (state: RootState) => ({
+    board: state.board.board,
+    selectedNumber: state.selection.selectedNumber,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
+    toggleNumber: bindActionCreators(actions.toggleNumber, dispatch),
+});
+
+interface StateFromProps {
+    board: Board;
+    selectedNumber: number;
+};
+
+interface DispatchFromProps {
+    toggleNumber: (ToggleNumberPayload) => void;
+}
+
+export default connect<StateFromProps, DispatchFromProps, void>(
+    mapStateToProps,
+    mapDispatchToProps
+)(BoardGrid)
