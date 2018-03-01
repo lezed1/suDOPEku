@@ -1,4 +1,4 @@
-import { TOGGLE_NUMBER } from '../actions/actions';
+import { SELECT_NUMBER, Actions } from '../actions/actions';
 import { Board } from '../lib/sudopeku';
 
 export type SelectionState = {
@@ -9,7 +9,10 @@ export const initialState: SelectionState = {
     selectedNumber: 1,
 };
 
-export function selectionReducer(state: SelectionState = initialState, action) {
-    // TODO: Make numbers selectable
+export function selectionerReducer(state: SelectionState = initialState, action: Actions[typeof SELECT_NUMBER]): SelectionState {
+    switch (action.type) {
+        case SELECT_NUMBER:
+            return { selectedNumber: action.payload.selectedNumber };
+    }
     return state;
 }

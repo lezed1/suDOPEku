@@ -9,7 +9,7 @@ export const initialState: BoardState = {
     board: new Board(),
 };
 
-export function boardReducer(state: BoardState = initialState, action) {
+export function boardReducer(state: BoardState = initialState, action): BoardState {
     switch (action.type) {
         case TOGGLE_NUMBER:
         const { row, col, number } = action.payload;

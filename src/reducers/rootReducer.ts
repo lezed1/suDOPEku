@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import { BoardState, boardReducer } from './boardReducer';
-import { SelectionState, selectionReducer } from './selectionReducer';
+import { SelectionState, selectionerReducer } from './selectionReducer';
 
 export type RootState = {
     board: BoardState;
@@ -9,5 +9,5 @@ export type RootState = {
 
 export default combineReducers<RootState>({
     board: boardReducer,
-    selection: selectionReducer,
+    selection: selectionerReducer,
 });

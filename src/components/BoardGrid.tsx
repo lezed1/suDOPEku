@@ -4,7 +4,7 @@ import { Board, Cell, Location } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { BoardState } from "../reducers/boardReducer";
 import { bindActionCreators, Dispatch } from "redux";
-import { actions, ToggleNumberPayload } from "../actions/actions"
+import { actions, TToggleNumberPayload } from "../actions/actions"
 import { RootState } from "../reducers/rootReducer";
 
 

@@ -3,6 +3,7 @@ import * as Immutable from "immutable";
 import "./../assets/scss/App.scss";
 import { Board, Cell } from "../lib/sudopeku";
 import BoardGrid from "./BoardGrid"
+import Selectioner from "./Selectioner";
 
 export interface AppProps {
 }
@@ -20,6 +21,7 @@ export default class App extends React.Component<AppProps, undefined> {
         return (
             <div className="app">
                 <BoardGrid />
+                <Selectioner />
             </div>
         );
     }
