@@ -1,18 +1,18 @@
-import { SELECT_NUMBER, Actions } from "../actions/actions";
+import { SELECT_VALUE, Actions } from "../actions/actions";
 import { Board } from "../lib/sudopeku";
 
 export type SelectionState = {
-    readonly selectedNumber: number,
+    readonly selectedValue: number,
 };
 
 export const initialState: SelectionState = {
-    selectedNumber: 1,
+    selectedValue: 1,
 };
 
-export function selectionerReducer(state: SelectionState = initialState, action: Actions[typeof SELECT_NUMBER]): SelectionState {
+export function selectionerReducer(state: SelectionState = initialState, action: Actions[typeof SELECT_VALUE]): SelectionState {
     switch (action.type) {
-        case SELECT_NUMBER:
-            return { selectedNumber: action.payload.selectedNumber };
+        case SELECT_VALUE:
+            return { selectedValue: action.payload.selectedValue };
     }
     return state;
 }

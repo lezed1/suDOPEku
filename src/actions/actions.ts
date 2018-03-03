@@ -1,38 +1,38 @@
 import { createAction } from "typesafe-actions";
 
-export const TOGGLE_NUMBER = "TOGGLE_NUMBER";
-export const SELECT_NUMBER = "SELECT_NUMBER";
+export const TOGGLE_VALUE = "TOGGLE_VALUE";
+export const SELECT_VALUE = "SELECT_VALUE";
 
-export type TToggleNumberPayload = {
+export type TToggleValuePayload = {
     row: number;
     col: number;
     value: number;
 };
 
-export type TSelectNumberPayload = {
-    selectedNumber: number;
+export type TSelectValuePayload = {
+    selectedValue: number;
 };
 
 export type Actions = {
-    TOGGLE_NUMBER: {
-        type: typeof TOGGLE_NUMBER,
-        payload: TToggleNumberPayload,
+    TOGGLE_VALUE: {
+        type: typeof TOGGLE_VALUE,
+        payload: TToggleValuePayload,
     },
-    SELECT_NUMBER: {
-        type: typeof SELECT_NUMBER,
-        payload: TSelectNumberPayload,
+    SELECT_VALUE: {
+        type: typeof SELECT_VALUE,
+        payload: TSelectValuePayload,
     }
 };
 
 export type RootAction = Actions[keyof Actions];
 
 export const actions = {
-    toggleNumber: (payload: TToggleNumberPayload): Actions[typeof TOGGLE_NUMBER] => ({
-        type: TOGGLE_NUMBER,
+    toggleValue: (payload: TToggleValuePayload): Actions[typeof TOGGLE_VALUE] => ({
+        type: TOGGLE_VALUE,
         payload,
     }),
-    selectNumber: (payload: TSelectNumberPayload): Actions[typeof SELECT_NUMBER] => ({
-        type: SELECT_NUMBER,
+    selectValue: (payload: TSelectValuePayload): Actions[typeof SELECT_VALUE] => ({
+        type: SELECT_VALUE,
         payload,
     }),
 };

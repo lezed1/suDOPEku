@@ -57,24 +57,24 @@ export class Location {
 }
 
 export interface Cell {
-    getComponent();
+    getComponent(selectedValue: number);
 
     toggleValue(value: number);
 }
 
-export class Number implements Cell {
-    number: number;
+export class Value implements Cell {
+    value: number;
 
     constructor(value: number) {
-        this.number = value;
+        this.value = value;
     }
 
-    getComponent() {
-        return this.number;
+    getComponent(selectedValue: number) {
+        return <div className={`value${this.value === selectedValue ? " selected" : ""}`}>{this.value}</div>;
     }
 
     toggleValue(value: number) {
-        if (this.number === value) {
+        if (this.value === value) {
             return new Blank();
         } else {
             return this;
@@ -83,11 +83,11 @@ export class Number implements Cell {
 }
 
 export class Blank implements Cell {
-    getComponent() {
-        return null;
+    getComponent(selectedValue: number) {
+        return <div className="blank" />;
     }
 
     toggleValue(value: number) {
-        return new Number(value);
+        return new Value(value);
     }
 }

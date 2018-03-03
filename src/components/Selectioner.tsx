@@ -3,15 +3,15 @@ import "./../assets/scss/Selectioner.scss";
 import { Board, Cell, Location } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { actions, TSelectNumberPayload } from "../actions/actions";
+import { actions, TSelectValuePayload, TToggleValuePayload } from "../actions/actions";
 import { RootState } from "../reducers/rootReducer";
 import * as R from "ramda";
 
 
 export interface ISelectionerProps {
-    selectedNumber: number;
+    selectedValue: number;
 
-    selectNumber(TSelectNumberPayload): () => void;
+    selectValue(payload: TSelectValuePayload): () => void;
 }
 
 class Selectioner extends React.Component<ISelectionerProps, undefined> {
@@ -21,7 +21,7 @@ class Selectioner extends React.Component<ISelectionerProps, undefined> {
                 <div className="selectionerGrid">
                     {
                         R.range(1, 10).map((i) =>
-                            <div className={`cell${this.props.selectedNumber === i ? " selected" : ""}`} key={i} onClick={() => this.props.selectNumber({ selectedNumber: i })}>
+                            <div className={`cell${this.props.selectedValue === i ? " selected" : ""}`} key={i} onClick={() => this.props.selectValue({ selectedValue: i })}>
                                 <span className="cellValue">{i}</span>
                             </div>
                         )
@@ -33,19 +33,19 @@ class Selectioner extends React.Component<ISelectionerProps, undefined> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    selectedNumber: state.selection.selectedNumber,
+    selectedValue: state.selection.selectedValue,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
-    selectNumber: bindActionCreators(actions.selectNumber, dispatch),
+    selectValue: bindActionCreators(actions.selectValue, dispatch),
 });
 
 interface StateFromProps {
-    selectedNumber: number;
+    selectedValue: number;
 }
 
 interface DispatchFromProps {
-    selectNumber: (ToggleNumberPayload) => void;
+    selectValue: (payload: TSelectValuePayload) => void;
 }
 
 export default connect<StateFromProps, DispatchFromProps, void>(

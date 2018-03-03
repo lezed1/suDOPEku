@@ -11,6 +11,7 @@ body,
 .app {
   display: grid;
   grid-template-rows: 75% 25%;
+  user-select: none;
 
   .boardGridContainer {
     margin: 5vmin;
