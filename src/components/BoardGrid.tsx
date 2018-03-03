@@ -11,28 +11,25 @@ import { RootState } from "../reducers/rootReducer";
 export interface BoardProps {
     board: Board;
     selectedNumber: number;
-    toggleNumber(ToggleNumberPayload): () => void;
+    toggleNumber(payload: TToggleNumberPayload): () => void;
 }
 
 class BoardGrid extends React.Component<BoardProps, undefined> {
     createGrid() {
         const size = this.props.board.size;
-        const rows = [];
+        const cells = [];
         for (let row = 1; row <= size; row++) {
-            const cols = [];
             for (let col = 1; col <= size; col++) {
                 const cellComponent = this.props.board.board.get(new Location(row, col)).getComponent();
-                cols.push(
-                    <div className="cell" onClick={() => this.props.toggleNumber({row, col, number: this.props.selectedNumber})} key={col}>
+                cells.push(
+                    <div className="cell" onClick={() => this.props.toggleNumber({ row, col, value: this.props.selectedNumber })} key={`${row}-${col}`}>
                         <div className="cellContents" >
                             {cellComponent}
                         </div>
-                    </div>)
-                    ;
+                    </div>);
             }
-            rows.push(<div className="boardColumns" key={row}>{cols}</div>);
         }
-        return (<div className="boardRows">{rows}</div>);
+        return (<div className="boardGrid">{cells}</div>);
     }
 
     render() {

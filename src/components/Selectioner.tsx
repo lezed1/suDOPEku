@@ -18,16 +18,15 @@ class Selectioner extends React.Component<ISelectionerProps, undefined> {
     render() {
         return (
             <div className="selectioner">
-                {
-                    this.props.selectedNumber
-                }
-                {
-                    R.range(1, 9).map((i) =>
-                        <div key={i} onClick={() => this.props.selectNumber({selectedNumber: i})}>
-                            {i}
-                        </div>
-                    )
-                }
+                <div className="selectionerGrid">
+                    {
+                        R.range(1, 10).map((i) =>
+                            <div className={`cell${this.props.selectedNumber === i ? " selected" : ""}`} key={i} onClick={() => this.props.selectNumber({ selectedNumber: i })}>
+                                <span className="cellValue">{i}</span>
+                            </div>
+                        )
+                    }
+                </div>
             </div>
         );
     }

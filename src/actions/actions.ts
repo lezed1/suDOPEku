@@ -6,7 +6,7 @@ export const SELECT_NUMBER = "SELECT_NUMBER";
 export type TToggleNumberPayload = {
     row: number;
     col: number;
-    number: number;
+    value: number;
 };
 
 export type TSelectNumberPayload = {

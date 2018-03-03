@@ -20,8 +20,12 @@ export default class App extends React.Component<AppProps, undefined> {
     render() {
         return (
             <div className="app">
-                <BoardGrid />
-                <Selectioner />
+                <div className="boardGridContainer" >
+                    <BoardGrid />
+                </div>
+                <div className="selectionerContainer" >
+                    <Selectioner />
+                </div>
             </div>
         );
     }
