@@ -3,7 +3,7 @@ import "./../assets/scss/Selectioner.scss";
 import { Board, Cell, Location } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { actions, TSelectNumberPayload } from "../actions/actions"
+import { actions, TSelectNumberPayload } from "../actions/actions";
 import { RootState } from "../reducers/rootReducer";
 import * as R from "ramda";
 
@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
 
 interface StateFromProps {
     selectedNumber: number;
-};
+}
 
 interface DispatchFromProps {
     selectNumber: (ToggleNumberPayload) => void;
@@ -52,4 +52,4 @@ interface DispatchFromProps {
 export default connect<StateFromProps, DispatchFromProps, void>(
     mapStateToProps,
     mapDispatchToProps
-)(Selectioner)
+)(Selectioner);

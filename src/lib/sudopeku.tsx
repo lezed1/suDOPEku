@@ -11,7 +11,7 @@ export class Board {
     constructor(size: number = 9, board?: Map<Location, Cell>) {
         if (size <= 0) {
             throw "size must be positive";
-        } else if (Math.sqrt(size) % 1 != 0) {
+        } else if (Math.sqrt(size) % 1 !== 0) {
             throw "size must be a square number";
         }
 
@@ -31,9 +31,9 @@ export class Board {
         }
     }
 
-    toggleNumberByCell(row: number, col: number, number: number): Board {
+    toggleValueByCell(row: number, col: number, value: number): Board {
         const loc = new Location(row, col);
-        const new_board = this.board.set(loc, this.board.get(loc).toggleNumber(number));
+        const new_board = this.board.set(loc, this.board.get(loc).toggleValue(value));
         return new Board(this.size, new_board);
     }
 }
@@ -59,7 +59,7 @@ export class Location {
 export interface Cell {
     getComponent();
 
-    toggleNumber(number: number);
+    toggleValue(value: number);
 }
 
 export class Number implements Cell {
@@ -73,8 +73,8 @@ export class Number implements Cell {
         return this.number;
     }
 
-    toggleNumber(number: number) {
-        if (this.number = number) {
+    toggleValue(value: number) {
+        if (this.number = value) {
             return new Blank();
         } else {
             return this;
@@ -87,7 +87,7 @@ export class Blank implements Cell {
         return null;
     }
 
-    toggleNumber(number: number) {
-        return new Number(number);;
+    toggleValue(value: number) {
+        return new Number(value);
     }
 }

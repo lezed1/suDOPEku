@@ -4,14 +4,13 @@ import { Board, Cell, Location } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { BoardState } from "../reducers/boardReducer";
 import { bindActionCreators, Dispatch } from "redux";
-import { actions, TToggleNumberPayload } from "../actions/actions"
+import { actions, TToggleNumberPayload } from "../actions/actions";
 import { RootState } from "../reducers/rootReducer";
 
 
 export interface BoardProps {
     board: Board;
     selectedNumber: number;
-    
     toggleNumber(ToggleNumberPayload): () => void;
 }
 
@@ -59,7 +58,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
 interface StateFromProps {
     board: Board;
     selectedNumber: number;
-};
+}
 
 interface DispatchFromProps {
     toggleNumber: (ToggleNumberPayload) => void;
@@ -68,4 +67,4 @@ interface DispatchFromProps {
 export default connect<StateFromProps, DispatchFromProps, void>(
     mapStateToProps,
     mapDispatchToProps
-)(BoardGrid)
+)(BoardGrid);

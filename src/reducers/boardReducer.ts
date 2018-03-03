@@ -1,9 +1,9 @@
-import { TOGGLE_NUMBER } from '../actions/actions';
-import { Board } from '../lib/sudopeku';
+import { TOGGLE_NUMBER } from "../actions/actions";
+import { Board } from "../lib/sudopeku";
 
 export type BoardState = {
     readonly board: Board,
-}
+};
 
 export const initialState: BoardState = {
     board: new Board(),
@@ -12,9 +12,9 @@ export const initialState: BoardState = {
 export function boardReducer(state: BoardState = initialState, action): BoardState {
     switch (action.type) {
         case TOGGLE_NUMBER:
-        const { row, col, number } = action.payload;
+        const { row, col, value } = action.payload;
         return {
-            board: state.board.toggleNumberByCell(row, col, number),
+            board: state.board.toggleValueByCell(row, col, value),
         };
     }
     return state;

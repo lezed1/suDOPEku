@@ -1,9 +1,9 @@
-import { SELECT_NUMBER, Actions } from '../actions/actions';
-import { Board } from '../lib/sudopeku';
+import { SELECT_NUMBER, Actions } from "../actions/actions";
+import { Board } from "../lib/sudopeku";
 
 export type SelectionState = {
     readonly selectedNumber: number,
-}
+};
 
 export const initialState: SelectionState = {
     selectedNumber: 1,

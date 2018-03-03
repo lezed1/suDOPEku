@@ -1,7 +1,7 @@
 import { createAction } from "typesafe-actions";
 
-export const TOGGLE_NUMBER = 'TOGGLE_NUMBER';
-export const SELECT_NUMBER = 'SELECT_NUMBER';
+export const TOGGLE_NUMBER = "TOGGLE_NUMBER";
+export const SELECT_NUMBER = "SELECT_NUMBER";
 
 export type TToggleNumberPayload = {
     row: number;
@@ -11,7 +11,7 @@ export type TToggleNumberPayload = {
 
 export type TSelectNumberPayload = {
     selectedNumber: number;
-}
+};
 
 export type Actions = {
     TOGGLE_NUMBER: {
@@ -22,7 +22,7 @@ export type Actions = {
         type: typeof SELECT_NUMBER,
         payload: TSelectNumberPayload,
     }
-}
+};
 
 export type RootAction = Actions[keyof Actions];
 
@@ -35,4 +35,4 @@ export const actions = {
         type: SELECT_NUMBER,
         payload,
     }),
-}
+};

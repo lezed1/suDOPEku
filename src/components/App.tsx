@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Immutable from "immutable";
 import "./../assets/scss/App.scss";
 import { Board, Cell } from "../lib/sudopeku";
-import BoardGrid from "./BoardGrid"
+import BoardGrid from "./BoardGrid";
 import Selectioner from "./Selectioner";
 
 export interface AppProps {
