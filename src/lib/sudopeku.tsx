@@ -74,7 +74,7 @@ export class Number implements Cell {
     }
 
     toggleValue(value: number) {
-        if (this.number = value) {
+        if (this.number === value) {
             return new Blank();
         } else {
             return this;
