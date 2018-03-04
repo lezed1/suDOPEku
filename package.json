@@ -1,27 +1,21 @@
 {
-  "name": "react-webpack-typescript-starter",
+  "name": "sudopeku",
   "version": "0.1.0",
-  "description": "Starter kit for React, Webpack (with Hot Module Replacement), Typescript and Babel.",
+  "private": true,
+  "description": "A powerful Sudoku player designed for power players.",
   "keywords": [
-    "react",
-    "webpack",
-    "typescript",
-    "babel",
-    "sass",
-    "hmr",
-    "starter",
-    "boilerplate"
+    "sudoku"
   ],
-  "author": "Viktor Persson",
-  "license": "MIT",
+  "author": "Zander Bolgar",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vikpe/react-webpack-typescript-starter.git"
+    "url": "git+git@github.com:lezed1/suDOPEku.git"
   },
   "bugs": {
-    "url": "https://github.com/vikpe/react-webpack-typescript-starter/issues"
+    "url": "https://github.com/lezed1/suDOPEku/issues"
   },
-  "homepage": "https://github.com/vikpe/react-webpack-typescript-starter",
+  "homepage": "https://lezed1.github.io/suDOPEku/",
   "scripts": {
     "build": "npm run clean-dist && webpack -p --config=configs/webpack/prod.js",
     "clean-dist": "rm -f -r -d dist",
