@@ -2,6 +2,10 @@ import * as React from "react";
 import * as R from "ramda";
 import { Map } from "immutable";
 
+function isValidValue(value) {
+    return value >= 1 && value <= 9 && value % 1 === 0;
+}
+
 export class Board {
     size: number;
     house_width: number;
@@ -101,6 +105,9 @@ export class Blank implements Cell {
     }
 
     toggleValue(value: number) {
+        if (!isValidValue(value)) {
+            return this;
+        }
         return new Value(value);
     }
 }
