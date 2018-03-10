@@ -17,12 +17,12 @@
     border: 1px solid black;
     display: grid;
 
+    &.selected {
+      background-color: turquoise;
+    }
+
     .value {
       margin: auto;
-
-      &.selected {
-        background-color: turquoise;
-      }
     }
   }
 }

@@ -20,9 +20,10 @@ class BoardGrid extends React.Component<BoardProps, undefined> {
         const cells = [];
         for (let row = 1; row <= size; row++) {
             for (let col = 1; col <= size; col++) {
-                const cellComponent = this.props.board.board.get(new Location(row, col)).getComponent(this.props.selectedValue);
+                const cell = this.props.board.board.get(new Location(row, col));
+                const cellComponent = cell.getComponent(this.props.selectedValue);
                 cells.push(
-                    <div className="cell" onClick={() => this.props.toggleValue({ row, col, value: this.props.selectedValue })} key={`${row}-${col}`}>
+                    <div className={`cell ${cell.getCellClass(this.props.selectedValue)}`} onClick={() => this.props.toggleValue({ row, col, value: this.props.selectedValue })} key={`${row}-${col}`}>
                         {cellComponent}
                     </div>);
             }
