@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./../assets/scss/BoardGrid.scss";
-import { Board, Cell, Location } from "../lib/sudopeku";
+import { Board, Cell, Location, SIZE } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { BoardState } from "../reducers/boardReducer";
 import { bindActionCreators, Dispatch } from "redux";
@@ -16,10 +16,9 @@ export interface BoardProps {
 
 class BoardGrid extends React.Component<BoardProps, undefined> {
     createGrid() {
-        const size = this.props.board.size;
         const cells = [];
-        for (let row = 1; row <= size; row++) {
-            for (let col = 1; col <= size; col++) {
+        for (let row = 1; row <= SIZE; row++) {
+            for (let col = 1; col <= SIZE; col++) {
                 const cell = this.props.board.board.get(new Location(row, col));
                 const cellComponent = cell.getComponent(this.props.selectedValue);
                 cells.push(

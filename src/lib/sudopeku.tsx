@@ -2,33 +2,25 @@ import * as React from "react";
 import * as R from "ramda";
 import { Map } from "immutable";
 
+export const SIZE = 9;
+export const SQUARE_HOUSE_WIDTH = 3;
+
 function isValidValue(value) {
     return value >= 1 && value <= 9 && value % 1 === 0;
 }
 
 export class Board {
-    size: number;
-    house_width: number;
-
     board: Map<Location, Cell>;
 
-    constructor(size: number = 9, board?: Map<Location, Cell>) {
-        if (size <= 0) {
-            throw "size must be positive";
-        } else if (Math.sqrt(size) % 1 !== 0) {
-            throw "size must be a square number";
-        }
-
-        this.house_width = Math.sqrt(size);
-        this.size = size;
+    constructor(board?: Map<Location, Cell>) {
 
         if (board) {
             this.board = board;
         } else {
             this.board = Map();
 
-            for (let i = 1; i <= size; i++) {
-                for (let j = 1; j <= size; j++) {
+            for (let i = 1; i <= SIZE; i++) {
+                for (let j = 1; j <= SIZE; j++) {
                     this.board = this.board.set(new Location(i, j), new Blank());
                 }
             }
@@ -38,7 +30,7 @@ export class Board {
     toggleValueByCell(row: number, col: number, value: number): Board {
         const loc = new Location(row, col);
         const new_board = this.board.set(loc, this.board.get(loc).toggleValue(value));
-        return new Board(this.size, new_board);
+        return new Board(new_board);
     }
 }
 
