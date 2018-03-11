@@ -1,13 +1,14 @@
 import {combineReducers} from "redux";
 import { BoardState, boardReducer } from "./boardReducer";
-import { SelectionState, selectionerReducer } from "./selectionReducer";
+import { selectionerReducer } from "./selectionReducer";
+import { SelectionerState } from "../lib/sudopeku";
 
 export type RootState = {
     board: BoardState;
-    selection: SelectionState,
+    selectioner: SelectionerState,
 };
 
 export default combineReducers<RootState>({
     board: boardReducer,
-    selection: selectionerReducer,
+    selectioner: selectionerReducer,
 });

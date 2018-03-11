@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./../assets/scss/BoardGrid.scss";
-import { Board, Cell, Location, SIZE } from "../lib/sudopeku";
+import { Board, Cell, Location, SIZE, SelectionerState } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { BoardState } from "../reducers/boardReducer";
 import { bindActionCreators, Dispatch } from "redux";
@@ -10,7 +10,7 @@ import { RootState } from "../reducers/rootReducer";
 
 export interface BoardProps {
     board: Board;
-    selectedValue: number;
+    selectionerState: SelectionerState;
     toggleValue(payload: TToggleValuePayload): () => void;
 }
 
@@ -20,9 +20,9 @@ class BoardGrid extends React.Component<BoardProps, undefined> {
         for (let row = 1; row <= SIZE; row++) {
             for (let col = 1; col <= SIZE; col++) {
                 const cell = this.props.board.board.get(new Location(row, col));
-                const cellComponent = cell.getComponent(this.props.selectedValue);
+                const cellComponent = cell.getComponent(this.props.selectionerState);
                 cells.push(
-                    <div className={`cell ${cell.getCellClass(this.props.selectedValue)}`} onClick={() => this.props.toggleValue({ row, col, value: this.props.selectedValue })} key={`${row}-${col}`}>
+                    <div className={`cell ${cell.getCellClass(this.props.selectionerState)}`} onClick={() => this.props.toggleValue({ row, col, selectionerState: this.props.selectionerState })} key={`${row}-${col}`}>
                         {cellComponent}
                     </div>);
             }
@@ -43,7 +43,7 @@ class BoardGrid extends React.Component<BoardProps, undefined> {
 
 const mapStateToProps = (state: RootState) => ({
     board: state.board.board,
-    selectedValue: state.selection.selectedValue,
+    selectionerState: state.selectioner,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
@@ -52,7 +52,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
 
 interface StateFromProps {
     board: Board;
-    selectedValue: number;
+    selectionerState: SelectionerState;
 }
 
 interface DispatchFromProps {

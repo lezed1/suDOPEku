@@ -1,9 +1,14 @@
 import * as React from "react";
 import * as R from "ramda";
-import { Map } from "immutable";
+import { Map, OrderedSet } from "immutable";
 
 export const SIZE = 9;
 export const SQUARE_HOUSE_WIDTH = 3;
+
+export type SelectionerState = {
+    readonly selectedValue: number;
+    readonly isPencil: boolean;
+};
 
 function isValidValue(value) {
     return value >= 1 && value <= 9 && value % 1 === 0;
@@ -12,24 +17,26 @@ function isValidValue(value) {
 export class Board {
     board: Map<Location, Cell>;
 
-    constructor(board?: Map<Location, Cell>) {
-
-        if (board) {
-            this.board = board;
-        } else {
-            this.board = Map();
-
-            for (let i = 1; i <= SIZE; i++) {
-                for (let j = 1; j <= SIZE; j++) {
-                    this.board = this.board.set(new Location(i, j), new Blank());
-                }
-            }
-        }
+    constructor(board: Map<Location, Cell>) {
+        this.board = board;
     }
 
-    toggleValueByCell(row: number, col: number, value: number): Board {
+    static createEmpty() {
+        const board: Map<Location, Cell> = Map().withMutations(board => {
+            for (let i = 1; i <= SIZE; i++) {
+                for (let j = 1; j <= SIZE; j++) {
+                    board = board.set(new Location(i, j), new Blank());
+                }
+            }
+            return board;
+        }) as Map<Location, Cell>;
+
+        return new Board(board);
+    }
+
+    toggleValueByCell(row: number, col: number, selectionerState: SelectionerState): Board {
         const loc = new Location(row, col);
-        const new_board = this.board.set(loc, this.board.get(loc).toggleValue(value));
+        const new_board = this.board.set(loc, this.board.get(loc).toggleValue(selectionerState));
         return new Board(new_board);
     }
 }
@@ -53,33 +60,34 @@ export class Location {
 }
 
 export interface Cell {
-    getComponent(selectedValue: number);
-    getCellClass(selectedValue: number): string;
+    getComponent(selectionerState: SelectionerState);
+    getCellClass(selectionerState: SelectionerState): string;
 
-    toggleValue(value: number);
+    toggleValue(selectionerState: SelectionerState): Cell;
 }
 
 export class Value implements Cell {
     value: number;
 
     constructor(value: number) {
+        // TODO: Assert valid value.
         this.value = value;
     }
 
-    getComponent(selectedValue: number) {
+    getComponent(selectionerState: SelectionerState) {
         return <div className="value">{this.value}</div>;
     }
 
-    getCellClass(selectedValue: number): string {
-        if (this.value === selectedValue) {
+    getCellClass(selectionerState: SelectionerState): string {
+        if (this.value === selectionerState.selectedValue) {
             return "selected";
         }
 
         return "";
     }
 
-    toggleValue(value: number) {
-        if (this.value === value) {
+    toggleValue(selectionerState: SelectionerState) {
+        if (this.value === selectionerState.selectedValue && !selectionerState.isPencil) {
             return new Blank();
         } else {
             return this;
@@ -87,19 +95,62 @@ export class Value implements Cell {
     }
 }
 
-export class Blank implements Cell {
-    getComponent(selectedValue: number) {
-        return <div className="blank" />;
+export class Pencil implements Cell {
+    values: OrderedSet<number>;
+
+    constructor(values: OrderedSet<number>) {
+        // TODO: Assert valid value
+        this.values = values.sort() as OrderedSet<number>;
     }
 
-    getCellClass(selectedValue: number): string {
+    static ofSingle(value: number) {
+        return new Pencil(OrderedSet.of(value));
+    }
+
+    getComponent(selectionerState: SelectionerState) {
+        return this.values.map((v) => `${v} `);
+    }
+
+    getCellClass(selectionerState: SelectionerState): string {
+        if (this.values.has(selectionerState.selectedValue)) {
+            return "selectedPencil";
+        }
+
         return "";
     }
 
-    toggleValue(value: number) {
-        if (!isValidValue(value)) {
+    toggleValue(selectionerState: SelectionerState): Cell {
+        if (!isValidValue(selectionerState.selectedValue)) {
             return this;
+        } else if (!selectionerState.isPencil) {
+            return new Value(selectionerState.selectedValue);
+        } else if (this.values.has(selectionerState.selectedValue)) {
+            if (this.values.size === 1) {
+                return new Blank();
+            } else {
+                return new Pencil(this.values.delete(selectionerState.selectedValue));
+            }
+        } else {
+            return new Pencil(this.values.add(selectionerState.selectedValue));
         }
-        return new Value(value);
+    }
+}
+
+export class Blank implements Cell {
+    getComponent(selectionerState: SelectionerState) {
+        return <div className="blank" />;
+    }
+
+    getCellClass(selectionerState: SelectionerState): string {
+        return "";
+    }
+
+    toggleValue(selectionerState: SelectionerState) {
+        if (!isValidValue(selectionerState.selectedValue)) {
+            return this;
+        } else if (selectionerState.isPencil) {
+            return Pencil.ofSingle(selectionerState.selectedValue);
+        }
+        return new Value(selectionerState.selectedValue);
     }
 }

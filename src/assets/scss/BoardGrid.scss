@@ -21,8 +21,13 @@
       background-color: turquoise;
     }
 
+    &.selectedPencil {
+      background-color: yellow;
+    }
+
     .value {
       margin: auto;
+      font-size: 250%;
     }
   }
 }

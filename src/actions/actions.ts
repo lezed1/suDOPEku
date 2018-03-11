@@ -1,12 +1,14 @@
 import { createAction } from "typesafe-actions";
+import { SelectionerState } from "../lib/sudopeku";
 
 export const TOGGLE_VALUE = "TOGGLE_VALUE";
 export const SELECT_VALUE = "SELECT_VALUE";
+export const TOGGLE_PENCIL = "TOGGLE_PENCIL";
 
 export type TToggleValuePayload = {
     row: number;
     col: number;
-    value: number;
+    selectionerState: SelectionerState;
 };
 
 export type TSelectValuePayload = {
@@ -22,6 +24,9 @@ export type Actions = {
         type: typeof SELECT_VALUE,
         payload: TSelectValuePayload,
     }
+    TOGGLE_PENCIL: {
+        type: typeof TOGGLE_PENCIL,
+    }
 };
 
 export type RootAction = Actions[keyof Actions];
@@ -35,4 +40,7 @@ export const actions = {
         type: SELECT_VALUE,
         payload,
     }),
+    togglePencil: (): Actions[typeof TOGGLE_PENCIL] => ({
+        type: TOGGLE_PENCIL,
+    })
 };

@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./../assets/scss/Selectioner.scss";
-import { Board, Cell, Location } from "../lib/sudopeku";
+import { Board, Cell, Location, SelectionerState } from "../lib/sudopeku";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { actions, TSelectValuePayload, TToggleValuePayload } from "../actions/actions";
@@ -9,9 +9,10 @@ import * as R from "ramda";
 
 
 export interface ISelectionerProps {
-    selectedValue: number;
+    selectionerState: SelectionerState;
 
     selectValue(payload: TSelectValuePayload): () => void;
+    togglePencil(): void;
 }
 
 class Selectioner extends React.Component<ISelectionerProps, undefined> {
@@ -19,13 +20,23 @@ class Selectioner extends React.Component<ISelectionerProps, undefined> {
         return (
             <div className="selectioner">
                 <div className="selectionerGrid">
-                    {
-                        R.range(1, 10).map((i) =>
-                            <div className={`cell${this.props.selectedValue === i ? " selected" : ""}`} key={i} onClick={() => this.props.selectValue({ selectedValue: i })}>
-                                <span className="cellValue">{i}</span>
-                            </div>
-                        )
-                    }
+                    <div className="leftControls" />
+
+                    <div className="numberGrid">
+                        {
+                            R.range(1, 10).map((i) =>
+                                <div className={`cell ${this.props.selectionerState.selectedValue === i ? "selected" : ""}`} key={i} onClick={() => this.props.selectValue({ selectedValue: i })}>
+                                    <span className="cellValue">{i}</span>
+                                </div>
+                            )
+                        }
+                    </div>
+
+                    <div className="rightControls">
+                        <div className={`pencilButton ${this.props.selectionerState.isPencil ? "active" : ""}`} onClick={this.props.togglePencil}>
+                            Pencil
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -33,19 +44,21 @@ class Selectioner extends React.Component<ISelectionerProps, undefined> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    selectedValue: state.selection.selectedValue,
+    selectionerState: state.selectioner,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
     selectValue: bindActionCreators(actions.selectValue, dispatch),
+    togglePencil: bindActionCreators(actions.togglePencil, dispatch),
 });
 
 interface StateFromProps {
-    selectedValue: number;
+    selectionerState: SelectionerState;
 }
 
 interface DispatchFromProps {
     selectValue: (payload: TSelectValuePayload) => void;
+    togglePencil: () => void;
 }
 
 export default connect<StateFromProps, DispatchFromProps, void>(

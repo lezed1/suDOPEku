@@ -6,22 +6,55 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    border: 1px solid black;
+    // grid-template-columns: repeat(3, 1fr);
+    // grid-template-rows: 1fr;
+    grid-template-areas: "l l b c c c b2 r r";
 
-    .cell {
+    .leftControls {
+      grid-area: l;
+      height: 100%;
+      width: 100%;
+      background-color: red;
+    }
+
+    .rightControls {
+      grid-area: r;
+      height: 100%;
+      width: 100%;
+
+      .pencilButton {
+        height: 100%;
+        width: 100%;
+        border: 1px solid black;
+
+        &.active {
+          background: greenyellow;
+        }
+      }
+    }
+
+    .numberGrid {
+      grid-area: c;
       width: 100%;
       height: 100%;
       display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       border: 1px solid black;
 
-      &.selected {
-        background-color: turquoise;
-      }
+      .cell {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        border: 1px solid black;
 
-      .cellValue {
-        margin: auto;
+        &.selected {
+          background-color: turquoise;
+        }
+
+        .cellValue {
+          margin: auto;
+        }
       }
     }
   }
