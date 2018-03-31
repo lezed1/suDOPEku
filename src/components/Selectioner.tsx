@@ -13,6 +13,7 @@ export interface ISelectionerProps {
 
     selectValue(payload: TSelectValuePayload): () => void;
     togglePencil(): void;
+    autoPencil(): void;
 }
 
 class Selectioner extends React.Component<ISelectionerProps, undefined> {
@@ -20,7 +21,11 @@ class Selectioner extends React.Component<ISelectionerProps, undefined> {
         return (
             <div className="selectioner">
                 <div className="selectionerGrid">
-                    <div className="leftControls" />
+                    <div className="leftControls">
+                        <div className="autoPencilButton" onClick={this.props.autoPencil}>
+                            Auto Pencil!
+                        </div>
+                    </div>
 
                     <div className="numberGrid">
                         {
@@ -50,6 +55,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
     selectValue: bindActionCreators(actions.selectValue, dispatch),
     togglePencil: bindActionCreators(actions.togglePencil, dispatch),
+    autoPencil: bindActionCreators(actions.autoPencil, dispatch),
 });
 
 interface StateFromProps {
@@ -57,8 +63,9 @@ interface StateFromProps {
 }
 
 interface DispatchFromProps {
-    selectValue: (payload: TSelectValuePayload) => void;
-    togglePencil: () => void;
+    selectValue(payload: TSelectValuePayload): void;
+    togglePencil(): void;
+    autoPencil(): void;
 }
 
 export default connect<StateFromProps, DispatchFromProps, void>(

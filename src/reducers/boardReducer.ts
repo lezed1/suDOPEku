@@ -1,4 +1,4 @@
-import { TOGGLE_VALUE, Actions } from "../actions/actions";
+import { TOGGLE_VALUE, Actions, AUTO_PENCIL } from "../actions/actions";
 import { Board } from "../lib/sudopeku";
 
 export type BoardState = {
@@ -9,13 +9,20 @@ export const initialState: BoardState = {
     board: Board.createEmpty(),
 };
 
-export function boardReducer(state: BoardState = initialState, action: Actions[typeof TOGGLE_VALUE]): BoardState {
+export function boardReducer(state: BoardState = initialState, action: Actions[typeof TOGGLE_VALUE | typeof AUTO_PENCIL]): BoardState {
     switch (action.type) {
         case TOGGLE_VALUE:
-        const { row, col, selectionerState } = action.payload;
-        return {
-            board: state.board.toggleValueByCell(row, col, selectionerState),
-        };
+            const { row, col, selectionerState } = action.payload;
+            return {
+                ...state,
+                board: state.board.toggleValueByCell(row, col, selectionerState),
+            };
+
+        case AUTO_PENCIL:
+            return {
+                ...state,
+                board: state.board.autoPencil(),
+            };
     }
     return state;
 }

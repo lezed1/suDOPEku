@@ -56,7 +56,7 @@ interface StateFromProps {
 }
 
 interface DispatchFromProps {
-    toggleValue: (payload: TToggleValuePayload) => void;
+    toggleValue(payload: TToggleValuePayload): void;
 }
 
 export default connect<StateFromProps, DispatchFromProps, void>(

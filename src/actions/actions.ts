@@ -4,6 +4,7 @@ import { SelectionerState } from "../lib/sudopeku";
 export const TOGGLE_VALUE = "TOGGLE_VALUE";
 export const SELECT_VALUE = "SELECT_VALUE";
 export const TOGGLE_PENCIL = "TOGGLE_PENCIL";
+export const AUTO_PENCIL = "AUTO_PENCIL";
 
 export type TToggleValuePayload = {
     row: number;
@@ -27,6 +28,9 @@ export type Actions = {
     TOGGLE_PENCIL: {
         type: typeof TOGGLE_PENCIL,
     }
+    AUTO_PENCIL: {
+        type: typeof AUTO_PENCIL,
+    }
 };
 
 export type RootAction = Actions[keyof Actions];
@@ -42,5 +46,8 @@ export const actions = {
     }),
     togglePencil: (): Actions[typeof TOGGLE_PENCIL] => ({
         type: TOGGLE_PENCIL,
+    }),
+    autoPencil: (): Actions[typeof AUTO_PENCIL] => ({
+        type: AUTO_PENCIL,
     })
 };

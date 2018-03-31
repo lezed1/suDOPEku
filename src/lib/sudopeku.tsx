@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as R from "ramda";
-import { Map, OrderedSet } from "immutable";
+import { Map, OrderedSet, List, Collection } from "immutable";
+import * as assert from "assert";
 
 export const SIZE = 9;
 export const SQUARE_HOUSE_WIDTH = 3;
@@ -39,6 +40,33 @@ export class Board {
         const new_board = this.board.set(loc, this.board.get(loc).toggleValue(selectionerState));
         return new Board(new_board);
     }
+
+    autoPencil() {
+        console.log("Autopencil!");
+        let new_board = this.board;
+
+        for (let row = 1; row <= SIZE; row++) {
+            for (let col = 1; col <= SIZE; col++) {
+                const loc = new Location(row, col);
+
+                if (!this.board.get(loc).isValue()) {
+                    const adjacentCells = this.getCellsOfLocations(MultiLocation.allAdjacent(loc).locations);
+                    const adjacentValues = adjacentCells
+                        .filter(cell => cell && cell.isValue())
+                        .map((value: Value) => value.value);
+                    const candidates = OrderedSet(R.range(1, 10)).subtract(adjacentValues);
+
+                    new_board = new_board.set(loc, new Pencil(candidates));
+                }
+            }
+        }
+
+        return new Board(new_board);
+    }
+
+    getCellsOfLocations(locs: List<Location>) {
+        return locs.map(loc => this.board.get(loc));
+    }
 }
 
 export class Location {
@@ -59,7 +87,71 @@ export class Location {
     }
 }
 
+export class MultiLocation {
+    locations: List<Location>;
+    name: string;
+
+    constructor(locations: List<Location>, name: string) {
+        this.locations = locations;
+        this.name = name;
+    }
+
+    static rowHouse(row: number) {
+        let locations = R.range(1, 10).map((col) => new Location(row, col));
+
+        return new MultiLocation(List(locations), `Row ${row}`);
+    }
+
+    static rowHouseContaining(location: Location) {
+        return MultiLocation.rowHouse(location.row);
+    }
+
+    static colHouse(col: number) {
+        let locations = R.range(1, 10).map((row) => new Location(row, col));
+
+        return new MultiLocation(List(locations), `Col ${col}`);
+    }
+
+    static colHouseContaining(location: Location) {
+        return MultiLocation.colHouse(location.col);
+    }
+
+    static blockHouse(block: number) {
+        let locations = [];
+
+        const baseRow = Math.floor(block / 3) * 3;
+        const baseCol = block % 3 * 3;
+
+        for (let row = 1; row <= 3; row++) {
+            for (let col = 1; col <= 3; col++) {
+                locations.push(new Location(baseRow + row, baseCol + col));
+            }
+        }
+
+        return new MultiLocation(List(locations), `Block ${block}`);
+    }
+
+    static blockHouseContaining(location: Location) {
+        return MultiLocation.blockHouse(1 + Math.floor((location.row - 1) / 3) * 3 + Math.floor((location.col - 1) / 3));
+    }
+
+    static allAdjacent(location: Location) {
+        const rowHouse = this.rowHouseContaining(location);
+        const colHouse = this.colHouseContaining(location);
+        const blockHouse = this.blockHouseContaining(location);
+
+        let locations = OrderedSet<Location>().union(rowHouse.locations, colHouse.locations, blockHouse.locations);
+
+        return new MultiLocation(locations.toList(), `Adjacent to ${location}`);
+    }
+}
+
+console.log(MultiLocation.blockHouseContaining(new Location(6, 6)));
+
+
 export interface Cell {
+    isValue();
+
     getComponent(selectionerState: SelectionerState);
     getCellClass(selectionerState: SelectionerState): string;
 
@@ -92,6 +184,10 @@ export class Value implements Cell {
         } else {
             return this;
         }
+    }
+
+    isValue() {
+        return true;
     }
 }
 
@@ -134,6 +230,10 @@ export class Pencil implements Cell {
             return new Pencil(this.values.add(selectionerState.selectedValue));
         }
     }
+
+    isValue() {
+        return false;
+    }
 }
 
 export class Blank implements Cell {
@@ -152,5 +252,9 @@ export class Blank implements Cell {
             return Pencil.ofSingle(selectionerState.selectedValue);
         }
         return new Value(selectionerState.selectedValue);
+    }
+
+    isValue() {
+        return false;
     }
 }
