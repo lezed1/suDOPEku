@@ -57,7 +57,7 @@ export class Board {
                     let value;
 
                     if (value = sampleBoard[row - 1][col - 1]) {
-                        cell = new Value(value);
+                        cell = new InitialValue(value);
                     } else {
                         cell = new Blank();
                     }
@@ -227,6 +227,16 @@ export class Value implements Cell {
 
     isValue() {
         return true;
+    }
+}
+
+export class InitialValue extends Value {
+    getComponent(selectionerState: SelectionerState) {
+        return <div className="initialValue">{this.value}</div>;
+    }
+
+    toggleValue(selectionerState: SelectionerState) {
+        return this;
     }
 }
 

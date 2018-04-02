@@ -25,9 +25,14 @@
       background-color: yellow;
     }
 
-    .value {
+    .value,
+    .initialValue {
       margin: auto;
       font-size: 250%;
+    }
+
+    .initialValue {
+      color: blue;
     }
   }
 }
