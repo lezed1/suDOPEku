@@ -119,8 +119,8 @@ export class MultiLocation {
     static blockHouse(block: number) {
         let locations = [];
 
-        const baseRow = Math.floor(block / 3) * 3;
-        const baseCol = block % 3 * 3;
+        const baseRow = Math.floor((block - 1) / 3) * 3;
+        const baseCol = (block - 1) % 3 * 3;
 
         for (let row = 1; row <= 3; row++) {
             for (let col = 1; col <= 3; col++) {
@@ -132,7 +132,11 @@ export class MultiLocation {
     }
 
     static blockHouseContaining(location: Location) {
-        return MultiLocation.blockHouse(1 + Math.floor((location.row - 1) / 3) * 3 + Math.floor((location.col - 1) / 3));
+        const blockNumber = 1 +
+            3 * Math.floor((location.row - 1) / 3) +
+            Math.floor((location.col - 1) / 3);
+
+        return MultiLocation.blockHouse(blockNumber);
     }
 
     static allAdjacent(location: Location) {
