@@ -35,6 +35,42 @@ export class Board {
         return new Board(board);
     }
 
+    static createSample() {
+        const sampleBoard = [
+            [7, 5, 0, 4, 1, 0, 0, 0, 8],
+            [0, 0, 6, 0, 2, 0, 0, 0, 5],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+            [0, 0, 7, 0, 0, 5, 0, 4, 9],
+            [2, 9, 0, 0, 0, 0, 0, 8, 6],
+            [4, 3, 0, 6, 0, 0, 2, 0, 0],
+
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [8, 0, 0, 0, 4, 0, 6, 0, 0],
+            [6, 0, 0, 0, 9, 2, 0, 3, 4],
+        ];
+
+        const board: Map<Location, Cell> = Map().withMutations(board => {
+            for (let row = 1; row <= SIZE; row++) {
+                for (let col = 1; col <= SIZE; col++) {
+                    let cell;
+                    let value;
+
+                    if (value = sampleBoard[row - 1][col - 1]) {
+                        cell = new Value(value);
+                    } else {
+                        cell = new Blank();
+                    }
+
+                    board = board.set(new Location(row, col), cell);
+                }
+            }
+            return board;
+        }) as Map<Location, Cell>;
+
+        return new Board(board);
+    }
+
     toggleValueByCell(row: number, col: number, selectionerState: SelectionerState): Board {
         const loc = new Location(row, col);
         const new_board = this.board.set(loc, this.board.get(loc).toggleValue(selectionerState));
@@ -42,7 +78,6 @@ export class Board {
     }
 
     autoPencil() {
-        console.log("Autopencil!");
         let new_board = this.board;
 
         for (let row = 1; row <= SIZE; row++) {

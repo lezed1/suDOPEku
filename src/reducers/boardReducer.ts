@@ -6,7 +6,7 @@ export type BoardState = {
 };
 
 export const initialState: BoardState = {
-    board: Board.createEmpty(),
+    board: Board.createSample(),
 };
 
 export function boardReducer(state: BoardState = initialState, action: Actions[typeof TOGGLE_VALUE | typeof AUTO_PENCIL]): BoardState {
