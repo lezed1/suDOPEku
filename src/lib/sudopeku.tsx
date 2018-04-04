@@ -73,7 +73,8 @@ export class Board {
 
     toggleValueByCell(row: number, col: number, selectionerState: SelectionerState): Board {
         const loc = new Location(row, col);
-        const new_board = this.board.set(loc, this.board.get(loc).toggleValue(selectionerState));
+        const new_cells = this.board.get(loc).toggleValue(selectionerState, loc, this);
+        const new_board = this.board.merge(new_cells);
         return new Board(new_board);
     }
 
@@ -88,7 +89,8 @@ export class Board {
                     const adjacentCells = this.getCellsOfLocations(MultiLocation.allAdjacent(loc).locations);
                     const adjacentValues = adjacentCells
                         .filter(cell => cell && cell.isValue())
-                        .map((value: Value) => value.value);
+                        .map((value: Value) => value.value)
+                        .valueSeq();
                     const candidates = OrderedSet(R.range(1, 10)).subtract(adjacentValues);
 
                     new_board = new_board.set(loc, new Pencil(candidates));
@@ -99,8 +101,9 @@ export class Board {
         return new Board(new_board);
     }
 
-    getCellsOfLocations(locs: List<Location>) {
-        return locs.map(loc => this.board.get(loc));
+    getCellsOfLocations(locs: List<Location>): Map<Location, Cell> {
+        const locsMap = locs.toSet().toMap();
+        return locsMap.map(loc => this.board.get(loc)) as Map<Location, Cell>;
     }
 }
 
@@ -190,11 +193,12 @@ console.log(MultiLocation.blockHouseContaining(new Location(6, 6)));
 
 export interface Cell {
     isValue();
+    isPencil();
 
     getComponent(selectionerState: SelectionerState);
     getCellClass(selectionerState: SelectionerState): string;
 
-    toggleValue(selectionerState: SelectionerState): Cell;
+    toggleValue(selectionerState: SelectionerState, location: Location, board: Board): Map<Location, Cell>;
 }
 
 export class Value implements Cell {
@@ -217,16 +221,20 @@ export class Value implements Cell {
         return "";
     }
 
-    toggleValue(selectionerState: SelectionerState) {
+    toggleValue(selectionerState: SelectionerState, loc: Location, board: Board): Map<Location, Cell> {
         if (this.value === selectionerState.selectedValue && !selectionerState.isPencil) {
-            return new Blank();
+            return Map.of(loc, new Blank());
         } else {
-            return this;
+            return Map();
         }
     }
 
     isValue() {
         return true;
+    }
+
+    isPencil() {
+        return false;
     }
 }
 
@@ -235,10 +243,23 @@ export class InitialValue extends Value {
         return <div className="initialValue">{this.value}</div>;
     }
 
-    toggleValue(selectionerState: SelectionerState) {
-        return this;
+    toggleValue(selectionerState: SelectionerState, loc: Location, board: Board): Map<Location, Cell> {
+        return Map();
     }
 }
+
+
+function eliminateAdjacentPencils(value: number, loc: Location, board: Board): Map<Location, Cell> {
+    const adjacentCells = board.getCellsOfLocations(MultiLocation.allAdjacent(loc).locations);
+    const pencils: Map<Location, Pencil> = adjacentCells
+        .filter(cell => cell.isPencil()) as any;
+    const updates: Map<Location, Cell> = pencils
+        .filter(pencil => pencil.values.contains(value))
+        .map(pencil => new Pencil(pencil.values.delete(value))) as any;
+
+    return updates;
+}
+
 
 export class Pencil implements Cell {
     values: OrderedSet<number>;
@@ -264,24 +285,29 @@ export class Pencil implements Cell {
         return "";
     }
 
-    toggleValue(selectionerState: SelectionerState): Cell {
+    toggleValue(selectionerState: SelectionerState, loc: Location, board: Board): Map<Location, Cell> {
         if (!isValidValue(selectionerState.selectedValue)) {
-            return this;
+            return Map();
         } else if (!selectionerState.isPencil) {
-            return new Value(selectionerState.selectedValue);
+            const updates = eliminateAdjacentPencils(selectionerState.selectedValue, loc, board);
+            return updates.set(loc, new Value(selectionerState.selectedValue));
         } else if (this.values.has(selectionerState.selectedValue)) {
             if (this.values.size === 1) {
-                return new Blank();
+                return Map.of(loc, new Blank());
             } else {
-                return new Pencil(this.values.delete(selectionerState.selectedValue));
+                return Map.of(loc, new Pencil(this.values.delete(selectionerState.selectedValue)));
             }
         } else {
-            return new Pencil(this.values.add(selectionerState.selectedValue));
+            return Map.of(loc, new Pencil(this.values.add(selectionerState.selectedValue)));
         }
     }
 
     isValue() {
         return false;
+    }
+
+    isPencil() {
+        return true;
     }
 }
 
@@ -294,16 +320,22 @@ export class Blank implements Cell {
         return "";
     }
 
-    toggleValue(selectionerState: SelectionerState) {
+    toggleValue(selectionerState: SelectionerState, loc: Location, board: Board): Map<Location, Cell> {
         if (!isValidValue(selectionerState.selectedValue)) {
-            return this;
+            return Map();
         } else if (selectionerState.isPencil) {
-            return Pencil.ofSingle(selectionerState.selectedValue);
+            return Map.of(loc, Pencil.ofSingle(selectionerState.selectedValue));
         }
-        return new Value(selectionerState.selectedValue);
+
+        const updates = eliminateAdjacentPencils(selectionerState.selectedValue, loc, board);
+        return updates.set(loc, new Value(selectionerState.selectedValue));
     }
 
     isValue() {
+        return false;
+    }
+
+    isPencil() {
         return false;
     }
 }
