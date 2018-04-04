@@ -7,8 +7,6 @@ script: npm run build
 
 deploy:
   provider: pages
-  edge:
-    branch: pages-ivar-set
   local-dir: dist/
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
