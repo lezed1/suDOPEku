@@ -16,8 +16,9 @@ export interface BoardProps {
 
 class BoardGrid extends React.Component<BoardProps, undefined> {
     createGrid() {
-        const cells = [];
+        const cells = [<div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>, <div/>];
         for (let row = 1; row <= SIZE; row++) {
+            cells.push(<div/>);
             for (let col = 1; col <= SIZE; col++) {
                 const cell = this.props.board.board.get(new Location(row, col));
                 const cellComponent = cell.getComponent(this.props.selectionerState);
@@ -25,6 +26,16 @@ class BoardGrid extends React.Component<BoardProps, undefined> {
                     <div className={`cell ${cell.getCellClass(this.props.selectionerState)}`} onClick={() => this.props.toggleValue({ row, col, selectionerState: this.props.selectionerState })} key={`${row}-${col}`}>
                         {cellComponent}
                     </div>);
+
+                if (col % 3 === 0) {
+                    cells.push(<div/>);
+                }
+            }
+
+            if (row % 3 === 0) {
+                for (let i = 0; i < 13; i++) {
+                    cells.push(<div/>);
+                }
             }
         }
         return (<div className="boardGrid">{cells}</div>);

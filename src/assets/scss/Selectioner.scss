@@ -8,7 +8,7 @@
     display: grid;
     // grid-template-columns: repeat(3, 1fr);
     // grid-template-rows: 1fr;
-    grid-template-areas: "l l b c c c b2 r r";
+    grid-template-areas: "l l . c c c . r r";
 
     .leftControls {
       grid-area: l;
